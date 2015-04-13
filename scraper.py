@@ -27,7 +27,7 @@ blocks = soup.findAll('div', {'class':'even'})
 
 for block in blocks:
 
-	link = block.a['href']
+	fileUrl = block.a['href']
 	title = block.a.contents[0]
 	
 	# create the right strings for the new filename
