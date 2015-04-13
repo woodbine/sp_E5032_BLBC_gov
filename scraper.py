@@ -35,13 +35,11 @@ for block in blocks:
 		csvYr = title.split('_')[-2]
 		csvMth = title.split('_')[-3][:3]
 		csvMth = convert_mth_strings(csvMth);
+		filename = entity_id + "_" + csvYr + "_" + csvMth
+		todays_date = str(datetime.now())
+		scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
+		print filename
 	else:
 		print 'multiple months in file'
 			
-	filename = entity_id + "_" + csvYr + "_" + csvMth
-		
-	todays_date = str(datetime.now())
-		
-	scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
-			
-	print filename
+	
