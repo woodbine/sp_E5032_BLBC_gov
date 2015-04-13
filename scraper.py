@@ -29,13 +29,15 @@ for block in blocks:
 
 	fileUrl = block.a['href']
 	title = block.a.contents[0]
-	
-	# create the right strings for the new filename
-	title = title.upper().strip()
-	csvYr = title.split('_')[-2]
-	csvMth = title.split('_')[-3][:3]
-	csvMth = convert_mth_strings(csvMth);
-		
+	if '_' in title:
+		# create the right strings for the new filename
+		title = title.upper().strip()
+		csvYr = title.split('_')[-2]
+		csvMth = title.split('_')[-3][:3]
+		csvMth = convert_mth_strings(csvMth);
+	else:
+		print 'multiple months in file'
+			
 	filename = entity_id + "_" + csvYr + "_" + csvMth
 		
 	todays_date = str(datetime.now())
