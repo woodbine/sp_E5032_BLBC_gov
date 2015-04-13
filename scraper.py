@@ -32,8 +32,8 @@ for block in blocks:
 	
 	# create the right strings for the new filename
 	title = title.upper().strip()
-	csvYr = title.split(' ')[2]
-	csvMth = title.split(' ')[1][:3]
+	csvYr = title.split('_')[2]
+	csvMth = title.split('_')[1][:3]
 	csvMth = convert_mth_strings(csvMth);
 		
 	filename = entity_id + "_" + csvYr + "_" + csvMth
