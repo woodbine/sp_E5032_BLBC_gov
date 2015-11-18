@@ -86,9 +86,6 @@ def convert_mth_strings ( mth_string ):
 
 #### VARIABLES 1.0
 
-# change these to right ones!
-# go to webpage  look at source code, and how it find the links
-
 entity_id = "E5032_BLBC_gov"
 url = "http://www.bexley.gov.uk/index.aspx?articleid=10819"
 errors = 0
@@ -106,11 +103,6 @@ soup = BeautifulSoup(html, "lxml")
 
 links = soup.find_all('a', href=True)
 
-# To print out all page links
-for l in links:
-    print l
-
-# prints financial links
 months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 for link in links:
@@ -121,12 +113,14 @@ for link in links:
             msize = [m in link.text for m in months]
             msize = sum(msize)
 
+
             if msize >= 2:
                 url = link['href']
                 csvfile = link.text.strip().replace('_', ' ').split(' ')
                 csvYr = csvfile[1].strip()
                 csvMth = 'Q0'
-                print csvYr, csvMth, url
+                if 'Annual' in link.text:
+                    csvMth = 'Y1'
                 data.append([csvYr, csvMth, url])
 
             else:
@@ -135,11 +129,7 @@ for link in links:
                 csvYr = csvfile[1].strip()
                 csvMth = csvfile[0][:3].strip()
                 csvMth = convert_mth_strings(csvMth.upper())
-                print csvYr, csvMth, url
                 data.append([csvYr, csvMth, url])
-
-# get above bit to append
-
 
 #### STORE DATA 1.0
 
