@@ -103,29 +103,29 @@ soup = BeautifulSoup(html, "lxml")
 
 links = soup.find_all('a', href=True)
 
-months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
 for link in links:
     if 'p=0' in link['href']:
         if "CSV" in link.text:
 
-
-            msize = [m in link.text for m in months]
+            linkt = str(link.text).lower()
+            msize = [m in linkt for m in months]
             msize = sum(msize)
 
 
             if msize >= 2:
                 url = link['href']
-                csvfile = link.text.strip().replace('_', ' ').split(' ')
+                csvfile = linkt.strip().replace('_', ' ').split(' ')
                 csvYr = csvfile[1].strip()
                 csvMth = 'Q0'
-                if 'Annual' in link.text:
+                if 'annual' in linkt:
                     csvMth = 'Y1'
                 data.append([csvYr, csvMth, url])
 
             else:
                 url = link['href']
-                csvfile = link.text.strip().replace('_', ' ').split(' ')
+                csvfile = linkt.strip().replace('_', ' ').split(' ')
                 csvYr = csvfile[1].strip()
                 csvMth = csvfile[0][:3].strip()
                 csvMth = convert_mth_strings(csvMth.upper())
