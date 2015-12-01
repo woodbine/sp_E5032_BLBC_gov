@@ -113,7 +113,6 @@ for link in links:
             msize = [m in linkt for m in months]
             msize = sum(msize)
 
-
             if msize >= 2:
                 url = link['href']
                 csvfile = linkt.strip().replace('_', ' ').split(' ')
@@ -122,7 +121,6 @@ for link in links:
                 if 'annual' in linkt:
                     csvMth = 'Y1'
                 data.append([csvYr, csvMth, url])
-
             else:
                 url = link['href']
                 csvfile = linkt.strip().replace('_', ' ').split(' ')
