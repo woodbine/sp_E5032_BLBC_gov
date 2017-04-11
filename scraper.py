@@ -87,7 +87,7 @@ def convert_mth_strings ( mth_string ):
 #### VARIABLES 1.0
 
 entity_id = "E5032_BLBC_gov"
-url = "http://www.bexley.gov.uk/index.aspx?articleid=10819"
+url = "https://www.bexley.gov.uk/services/procurement/publication-payments-over-ps500"
 errors = 0
 data = []
 
@@ -101,33 +101,33 @@ soup = BeautifulSoup(html, "lxml")
 #### SCRAPE DATA
 
 
-links = soup.find_all('a', href=True)
+blocks = soup.find_all('div', 'views-row')
 
 months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
-for link in links:
-    if 'p=0' in link['href']:
-        if "CSV" in link.text:
-
-            linkt = str(link.text).lower()
-            msize = [m in linkt for m in months]
-            msize = sum(msize)
-
-            if msize >= 2:
-                url = link['href']
-                csvfile = linkt.strip().replace('_', ' ').split(' ')
-                csvYr = csvfile[1].strip()
-                csvMth = 'Q0'
-                if 'annual' in linkt:
-                    csvMth = 'Y1'
-                data.append([csvYr, csvMth, url])
-            else:
-                url = link['href']
-                csvfile = linkt.strip().replace('_', ' ').split(' ')
-                csvYr = csvfile[1].strip()
-                csvMth = csvfile[0][:3].strip()
-                csvMth = convert_mth_strings(csvMth.upper())
-                data.append([csvYr, csvMth, url])
+for block in blocks:
+    csv_lnk = block.find('a')
+    if 'CSV' in csv_lnk.text:
+        url = csv_lnk['href']
+        csvMth = csv_lnk.text.strip()[:3]
+        csvYr = csv_lnk.text.strip().split('-')[1]
+        if 'January-to-March' in csv_lnk.text:
+            csvMth = 'Q1'
+        elif 'April-to-June' in csv_lnk.text:
+            csvMth = 'Q2'
+        elif 'July-to-September' in csv_lnk.text:
+            csvMth = 'Q3'
+        elif 'October-to-December' in csv_lnk.text:
+            csvMth = 'Q4'
+        elif '2010-to-' in csv_lnk.text or '2011-to-' in csv_lnk.text or '2012-to-' in csv_lnk.text or\
+            '2013-to-' in csv_lnk.text or '2014-to-' in csv_lnk.text or '2015-to-' in csv_lnk.text:
+            csvMth = 'Y1'
+            csvYr = csv_lnk.text.split('-')[1]
+        if 'to' in csvYr:
+            csvYr = csv_lnk.text.split('-')[3]
+        csvYr = csvYr.replace('.v1', '')
+        csvMth = convert_mth_strings(csvMth.upper())
+        data.append([csvYr, csvMth, url])
 
 #### STORE DATA 1.0
 
@@ -150,5 +150,3 @@ if errors > 0:
 
 
 #### EOF
-			
-	
